@@ -52,21 +52,21 @@ def main():
     app.setStyle("Fusion")
     
     log.info("="*70)
-    log.info("🌍 Universal Live Translator — Professional Edition v4.5")
+    log.info("Universal Live Translator — Professional Edition v4.5")
     log.info("="*70)
-    log.info(f"📁 Data Directory: {BASE_DIR}")
-    log.info(f"🚀 GPU Status: {gpu_manager.device_name}")
-    log.info(f"💻 Device: {gpu_manager.device.upper()}")
-    log.info(f"⚡ CUDA: {'Available' if gpu_manager.has_cuda else 'Not detected'}")
-    log.info(f"🍎 MPS: {'Available' if gpu_manager.has_mps else 'Not detected'}")
-    log.info(f"🎨 UI: Material Design 3 (Netflix/Google-level)")
+    log.info(f"Data Directory: {BASE_DIR}")
+    log.info(f"GPU Status: {gpu_manager.device_name}")
+    log.info(f"Device: {gpu_manager.device.upper()}")
+    log.info(f"CUDA: {'Available' if gpu_manager.has_cuda else 'Not detected'}")
+    log.info(f"MPS: {'Available' if gpu_manager.has_mps else 'Not detected'}")
+    log.info("UI: Material Design 3 (Netflix/Google-level)")
     log.info("="*70)
     
     window = LiveTranslatorApp()
     window.show()
     
-    log.info("✅ Application started successfully")
-    log.info("💡 Press F1 for help and keyboard shortcuts")
+    log.info("Application started successfully")
+    log.info("Press F1 for help and keyboard shortcuts")
     
     sys.exit(app.exec())
 

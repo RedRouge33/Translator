@@ -17,7 +17,11 @@ def ensure_dependencies():
     for pkg in REQUIRED_PACKAGES:
         try:
             __import__(pkg.replace('-', '_').split('[')[0])
-        except ImportError:
+        except (ImportError, OSError) as e:
+            # Handle audio library issues gracefully
+            if pkg in ['sounddevice', 'pyaudio']:
+                log.warning(f"Audio library {pkg} not available: {e}")
+                continue
             missing.append(pkg)
     
     if missing:
