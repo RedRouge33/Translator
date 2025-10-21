@@ -37,10 +37,6 @@ class LiveTranslatorApp(QMainWindow):
         self.recognition_engine = RecognitionEngine.GOOGLE
         self.is_listening = False
         
-        # Initialize overlay
-        self.overlay = ResizableOverlay()
-        self.overlay.show()
-        
         # Performance monitoring
         self.last_history_refresh = time.time()
         self.history_refresh_throttle = 2.0
@@ -48,6 +44,11 @@ class LiveTranslatorApp(QMainWindow):
         # Setup UI with proper error handling
         try:
             self.setup_ui()
+            
+            # Initialize overlay AFTER UI setup to ensure proper threading
+            self.overlay = ResizableOverlay()
+            self.overlay.show()
+            
             self.apply_theme(config.get("theme", "dark"))
             self.load_settings()
             self.setup_shortcuts()
@@ -894,10 +895,11 @@ class LiveTranslatorApp(QMainWindow):
             self.show_error_dialog("Source Toggle Error", f"Failed to toggle audio source:\n{str(e)}")
     
     def update_status_safe(self, message):
-        """Thread-safe status update"""
+        """Thread-safe status update - use custom status label instead of statusBar"""
         try:
+            # Use QMetaObject to safely update the status label from any thread
             QMetaObject.invokeMethod(
-                self.statusBar(), "showMessage",
+                self.status_label, "setText",
                 Qt.ConnectionType.QueuedConnection,
                 Q_ARG(str, message)
             )

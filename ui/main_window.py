@@ -33,14 +33,17 @@ class LiveTranslatorApp(QMainWindow):
         self.source_type = "microphone"
         self.translation_mode = "Continuous"
         self.recognition_engine = RecognitionEngine.GOOGLE
-        self.overlay = ResizableOverlay()
-        self.overlay.show()
         
         # Performance monitoring
         self.last_history_refresh = time.time()
         self.history_refresh_throttle = 2.0  # seconds
         
         self.setup_ui()
+        
+        # Initialize overlay AFTER UI setup to ensure proper threading
+        self.overlay = ResizableOverlay()
+        self.overlay.show()
+        
         self.apply_theme(config.get("theme", "dark"))
         self.load_settings()
     
@@ -875,12 +878,16 @@ Enjoy your professional-grade translator! 🚀
             QTimer.singleShot(500, self.start_listening)
     
     def update_status_safe(self, message):
-        """Thread-safe status update"""
-        QMetaObject.invokeMethod(
-            self.statusBar(), "showMessage",
-            Qt.ConnectionType.QueuedConnection,
-            Q_ARG(str, message)
-        )
+        """Thread-safe status update - use custom status label instead of statusBar"""
+        try:
+            # Use QMetaObject to safely update the status label from any thread
+            QMetaObject.invokeMethod(
+                self.status_label, "setText",
+                Qt.ConnectionType.QueuedConnection,
+                Q_ARG(str, message)
+            )
+        except Exception as e:
+            log.error(f"Error updating status: {e}")
     
     def handle_recognition_error(self, error_msg):
         """Thread-safe error handling"""

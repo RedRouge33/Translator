@@ -24,14 +24,31 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 warnings.filterwarnings("ignore", category=UserWarning, module="ctranslate2")
 warnings.filterwarnings("ignore", message="pkg_resources is deprecated")
 
-# Setup logging
+# Setup logging with UTF-8 encoding to handle emojis on Windows
+import sys
+import io
+
+# Configure handlers with UTF-8 encoding
+file_handler = logging.FileHandler('translator.log', encoding='utf-8')
+file_handler.setLevel(logging.INFO)
+file_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+
+# For Windows console, wrap stdout to handle UTF-8
+if sys.platform == 'win32':
+    # Reconfigure stdout to use UTF-8 encoding
+    if hasattr(sys.stdout, 'reconfigure'):
+        sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+    else:
+        # Python 3.6 and earlier fallback
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace', line_buffering=True)
+
+stream_handler = logging.StreamHandler(sys.stdout)
+stream_handler.setLevel(logging.INFO)
+stream_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler('translator.log'),
-        logging.StreamHandler()
-    ]
+    handlers=[file_handler, stream_handler]
 )
 log = logging.getLogger("Translator")
 

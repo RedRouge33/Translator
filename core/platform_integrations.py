@@ -122,7 +122,7 @@ class PlatformIntegration:
             return True
         return False
     
-    def _setup_audio_routing(self, platform: Platform):
+    def _setup_audio_routing(self, plat: Platform):
         """Setup virtual audio device routing for a platform"""
         system = platform.system()
         
@@ -191,9 +191,9 @@ class PlatformIntegration:
         
         return False
     
-    def get_setup_instructions(self, platform: Platform) -> str:
+    def get_setup_instructions(self, plat: Platform) -> str:
         """Get setup instructions for a specific platform"""
-        config = self.platform_configs.get(platform)
+        config = self.platform_configs.get(plat)
         if not config:
             return "Platform not supported"
         
