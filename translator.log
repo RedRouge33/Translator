@@ -12,3 +12,39 @@
 2025-10-20 18:14:54,557 - INFO - Total RVC models loaded: 0
 2025-10-20 18:14:54,573 - INFO - Scanning for running communication platforms...
 2025-10-20 18:14:54,573 - INFO - Platform integration ready for: Discord, Zoom, Teams, Meet, Skype
+2025-10-21 09:58:13,362 - WARNING - CUDA not detected. GPU acceleration disabled.
+2025-10-21 09:58:13,362 - WARNING - PyTorch built with CUDA 12.8 but CUDA runtime not available
+2025-10-21 09:58:21,739 - WARNING - CUDA not detected. GPU acceleration disabled.
+2025-10-21 09:58:21,739 - WARNING - PyTorch built with CUDA 12.8 but CUDA runtime not available
+2025-10-21 09:59:29,748 - WARNING - CUDA not detected. GPU acceleration disabled.
+2025-10-21 09:59:29,748 - WARNING - PyTorch built with CUDA 12.8 but CUDA runtime not available
+2025-10-21 09:59:43,724 - WARNING - CUDA not detected. GPU acceleration disabled.
+2025-10-21 09:59:43,724 - WARNING - PyTorch built with CUDA 12.8 but CUDA runtime not available
+2025-10-21 09:59:43,752 - WARNING - SoundDevice not available: PortAudio library not found
+2025-10-21 09:59:43,753 - WARNING - PyAudio not available: No module named 'pyaudio'
+2025-10-21 09:59:43,753 - WARNING - No audio devices detected, creating dummy device
+2025-10-21 09:59:59,883 - WARNING - CUDA not detected. GPU acceleration disabled.
+2025-10-21 09:59:59,883 - WARNING - PyTorch built with CUDA 12.8 but CUDA runtime not available
+2025-10-21 09:59:59,911 - WARNING - SoundDevice not available: PortAudio library not found
+2025-10-21 09:59:59,911 - WARNING - PyAudio not available: No module named 'pyaudio'
+2025-10-21 09:59:59,911 - WARNING - No audio devices detected, creating dummy device
+2025-10-21 10:00:00,413 - INFO - ('Looking for cached Spacy xx_sent_ud_sm.',)
+2025-10-21 10:00:00,413 - INFO - ('Downloading Spacy xx_sent_ud_sm.',)
+2025-10-21 10:00:02,751 - INFO - ('Spacy xx_sent_ud_sm successfully cached.',)
+2025-10-21 10:00:38,864 - WARNING - CUDA not detected. GPU acceleration disabled.
+2025-10-21 10:00:38,864 - WARNING - PyTorch built with CUDA 12.8 but CUDA runtime not available
+2025-10-21 10:00:38,891 - WARNING - SoundDevice not available: PortAudio library not found
+2025-10-21 10:00:38,891 - WARNING - PyAudio not available: No module named 'pyaudio'
+2025-10-21 10:00:38,892 - WARNING - No audio devices detected, creating dummy device
+2025-10-21 10:00:39,353 - INFO - ('Looking for cached Spacy xx_sent_ud_sm.',)
+2025-10-21 10:00:39,379 - WARNING - Audio library sounddevice not available: PortAudio library not found
+2025-10-21 10:00:39,420 - WARNING - Audio library pyaudio not available: No module named 'pyaudio'
+2025-10-21 10:00:39,421 - INFO - ('get_installed_languages',)
+2025-10-21 10:00:39,422 - INFO - ('Get https://argos-net.com/v1/translate-en_fr-1_9.argosmodel',)
+2025-10-21 10:00:40,259 - INFO - ('Got https://argos-net.com/v1/translate-en_fr-1_9.argosmodel',)
+2025-10-21 10:00:40,785 - INFO - ('Get https://argos-net.com/v1/translate-en_es-1_0.argosmodel',)
+2025-10-21 10:00:41,817 - INFO - ('Got https://argos-net.com/v1/translate-en_es-1_0.argosmodel',)
+2025-10-21 10:00:42,417 - INFO - ('Get https://argos-net.com/v1/translate-fr_en-1_9.argosmodel',)
+2025-10-21 10:00:43,300 - INFO - ('Got https://argos-net.com/v1/translate-fr_en-1_9.argosmodel',)
+2025-10-21 10:00:43,822 - INFO - ('Get https://argos-net.com/v1/translate-es_en-1_9.argosmodel',)
+2025-10-21 10:00:47,021 - INFO - ('Got https://argos-net.com/v1/translate-es_en-1_9.argosmodel',)

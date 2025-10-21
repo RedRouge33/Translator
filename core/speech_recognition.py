@@ -8,7 +8,16 @@ import numpy as np
 from collections import deque
 from concurrent.futures import ThreadPoolExecutor
 import speech_recognition as sr
-import sounddevice as sd
+
+# Try to import sounddevice, but don't fail if it's not available
+try:
+    import sounddevice as sd
+    SOUNDDEVICE_AVAILABLE = True
+except ImportError:
+    SOUNDDEVICE_AVAILABLE = False
+    import logging
+    log = logging.getLogger("Translator")
+    log.warning("SoundDevice not available, system audio capture disabled")
 from vosk import KaldiRecognizer
 from PyQt6.QtCore import QThread, pyqtSignal
 from config import config
@@ -103,16 +112,28 @@ class ContinuousSpeechRecognitionThread(QThread):
     
     def _listen_system_audio_continuous(self):
         """Continuous system audio capture with proper threading and validation"""
+        if not SOUNDDEVICE_AVAILABLE:
+            error_msg = (
+                "System audio capture not available.\n\n"
+                "Required audio libraries are not installed.\n"
+                "Please install PortAudio and sounddevice:\n"
+                "  pip install sounddevice\n\n"
+                "Alternative: Use Microphone mode instead"
+            )
+            self.error_occurred.emit(error_msg)
+            return
+            
         loopback = audio_device_manager.get_loopback_device()
         if not loopback:
             error_msg = (
-                "❌ No working loopback device found.\n\n"
+                "No working loopback device found.\n\n"
                 "Windows: Enable 'Stereo Mix' in Sound Settings:\n"
                 "  1. Right-click speaker icon → Sounds\n"
                 "  2. Recording tab → Right-click → Show Disabled Devices\n"
                 "  3. Enable 'Stereo Mix' or 'Wave Out Mix'\n\n"
                 "macOS: Install BlackHole or Soundflower\n\n"
-                "Linux: Use PulseAudio monitor device"
+                "Linux: Use PulseAudio monitor device\n\n"
+                "Alternative: Try using Microphone mode instead"
             )
             self.error_occurred.emit(error_msg)
             return
@@ -191,11 +212,12 @@ class ContinuousSpeechRecognitionThread(QThread):
                 log.info("Device test successful")
             except Exception as test_error:
                 error_msg = (
-                    f"❌ System audio device test failed:\n\n"
+                    f"System audio device test failed:\n\n"
                     f"Device: {loopback.name}\n"
                     f"Error: {test_error}\n\n"
                     f"The device may be in use by another application\n"
-                    f"or not properly configured for recording."
+                    f"or not properly configured for recording.\n\n"
+                    f"Try closing other audio applications or use Microphone mode."
                 )
                 self.error_occurred.emit(error_msg)
                 return
@@ -221,7 +243,7 @@ class ContinuousSpeechRecognitionThread(QThread):
                 log.error(f"System audio error:\n{error_details}")
                 
                 error_msg = (
-                    f"❌ System audio failed:\n\n"
+                    f"System audio failed:\n\n"
                     f"Error: {str(e)}\n\n"
                     f"Device: {loopback.name if loopback else 'Unknown'}\n\n"
                     f"Possible solutions:\n"

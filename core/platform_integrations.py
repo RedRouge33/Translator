@@ -197,7 +197,8 @@ class PlatformIntegration:
         if not config:
             return "Platform not supported"
         
-        system_name = platform.system()
+        import platform as platform_module
+        system_name = platform_module.system()
         instructions = f"# Setup Instructions for {config['name']}\n\n"
         
         if config['supports_voice']:

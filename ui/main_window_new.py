@@ -52,9 +52,9 @@ class LiveTranslatorApp(QMainWindow):
             self.apply_theme(config.get("theme", "dark"))
             self.load_settings()
             self.setup_shortcuts()
-            log.info("✅ UI setup completed successfully")
+            log.info("UI setup completed successfully")
         except Exception as e:
-            log.error(f"❌ UI setup failed: {e}")
+            log.error(f"UI setup failed: {e}")
             self.show_error_dialog("UI Setup Error", f"Failed to initialize the user interface:\n{str(e)}")
     
     def setup_ui(self):
