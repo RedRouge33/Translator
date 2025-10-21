@@ -296,6 +296,8 @@ class LiveTranslatorApp(QMainWindow):
         output_header.addWidget(QLabel("🈯 Translation (Async Pipeline)"))
         output_header.addStretch()
         self.copy_btn = QPushButton("📋 Copy")
+        self.copy_btn.setMaximumHeight(30)
+        self.copy_btn.setMaximumWidth(100)
         self.copy_btn.clicked.connect(self.copy_output)
         output_header.addWidget(self.copy_btn)
         output_layout.addLayout(output_header)
@@ -342,16 +344,19 @@ class LiveTranslatorApp(QMainWindow):
         row1.setSpacing(8)
         
         self.translate_btn = QPushButton("🔄 Translate")
+        self.translate_btn.setMaximumHeight(35)
         self.translate_btn.clicked.connect(self.translate_manual)
         self.translate_btn.setToolTip("Manually translate (Ctrl+T)")
         row1.addWidget(self.translate_btn)
         
         self.speak_btn = QPushButton("🔊 Speak")
+        self.speak_btn.setMaximumHeight(35)
         self.speak_btn.clicked.connect(self.speak_output)
         self.speak_btn.setToolTip("Speak output (Ctrl+S)")
         row1.addWidget(self.speak_btn)
         
         self.stop_btn = QPushButton("🔇 Stop")
+        self.stop_btn.setMaximumHeight(35)
         self.stop_btn.clicked.connect(lambda: tts_manager.stop())
         self.stop_btn.setToolTip("Stop TTS playback")
         row1.addWidget(self.stop_btn)
@@ -362,11 +367,13 @@ class LiveTranslatorApp(QMainWindow):
         row2.setSpacing(8)
         
         self.source_btn = QPushButton("🎧 System Audio")
+        self.source_btn.setMaximumHeight(35)
         self.source_btn.clicked.connect(self.toggle_source)
         self.source_btn.setToolTip("Switch audio input source")
         row2.addWidget(self.source_btn)
         
         self.overlay_btn = QPushButton("👁️ Overlay")
+        self.overlay_btn.setMaximumHeight(35)
         self.overlay_btn.clicked.connect(self.toggle_overlay)
         self.overlay_btn.setToolTip("Toggle overlay (Ctrl+O)")
         row2.addWidget(self.overlay_btn)
@@ -423,26 +430,40 @@ class LiveTranslatorApp(QMainWindow):
     def setup_shortcuts(self):
         """Setup professional keyboard shortcuts for accessibility"""
         # Help and information
-        QShortcut(QKeySequence("F1"), self, self.show_help)
-        QShortcut(QKeySequence("Ctrl+H"), self, self.show_help)
+        shortcut = QShortcut(QKeySequence("F1"), self)
+        shortcut.activated.connect(self.show_help)
+        shortcut = QShortcut(QKeySequence("Ctrl+H"), self)
+        shortcut.activated.connect(self.show_help)
         
         # Main controls
-        QShortcut(QKeySequence("Ctrl+L"), self, self.toggle_listening)
-        QShortcut(QKeySequence("Ctrl+T"), self, self.translate_manual)
-        QShortcut(QKeySequence("Ctrl+S"), self, self.speak_output)
-        QShortcut(QKeySequence("Ctrl+O"), self, self.toggle_overlay)
-        QShortcut(QKeySequence("Ctrl+D"), self, self.toggle_theme)
+        shortcut = QShortcut(QKeySequence("Ctrl+L"), self)
+        shortcut.activated.connect(self.toggle_listening)
+        shortcut = QShortcut(QKeySequence("Ctrl+T"), self)
+        shortcut.activated.connect(self.translate_manual)
+        shortcut = QShortcut(QKeySequence("Ctrl+S"), self)
+        shortcut.activated.connect(self.speak_output)
+        shortcut = QShortcut(QKeySequence("Ctrl+O"), self)
+        shortcut.activated.connect(self.toggle_overlay)
+        shortcut = QShortcut(QKeySequence("Ctrl+D"), self)
+        shortcut.activated.connect(self.toggle_theme)
         
         # Advanced shortcuts for power users
-        QShortcut(QKeySequence("Ctrl+Shift+S"), self, self.show_settings)
-        QShortcut(QKeySequence("Ctrl+Shift+M"), self, self.show_models)
-        QShortcut(QKeySequence("Ctrl+E"), self, self.export_history)
-        QShortcut(QKeySequence("Ctrl+F"), self, self.focus_search)
-        QShortcut(QKeySequence("Ctrl+Shift+C"), self, self.clear_io_fields)
+        shortcut = QShortcut(QKeySequence("Ctrl+Shift+S"), self)
+        shortcut.activated.connect(self.show_settings)
+        shortcut = QShortcut(QKeySequence("Ctrl+Shift+M"), self)
+        shortcut.activated.connect(self.show_models)
+        shortcut = QShortcut(QKeySequence("Ctrl+E"), self)
+        shortcut.activated.connect(self.export_history)
+        shortcut = QShortcut(QKeySequence("Ctrl+F"), self)
+        shortcut.activated.connect(self.focus_search)
+        shortcut = QShortcut(QKeySequence("Ctrl+Shift+C"), self)
+        shortcut.activated.connect(self.clear_io_fields)
         
         # Application control
-        QShortcut(QKeySequence("Ctrl+Q"), self, self.close)
-        QShortcut(QKeySequence("Alt+F4"), self, self.close)
+        shortcut = QShortcut(QKeySequence("Ctrl+Q"), self)
+        shortcut.activated.connect(self.close)
+        shortcut = QShortcut(QKeySequence("Alt+F4"), self)
+        shortcut.activated.connect(self.close)
         
         log.info("✅ Keyboard shortcuts configured for accessibility")
     
@@ -727,7 +748,7 @@ Enjoy your professional-grade translator! 🚀
         
         # Enable voice duplication if that mode is selected
         if selected_mode == TranslationMode.VOICE_DUPLICATION:
-            if voice_duplication.get_current_model():
+            if voice_duplication.current_model:
                 voice_duplication.enable()
             else:
                 QMessageBox.information(
@@ -1156,7 +1177,6 @@ Enjoy your professional-grade translator! 🚀
         # Professional feedback
         theme_name = "🌙 Dark Mode" if new == "dark" else "☀️ Light Mode"
         self.statusBar().showMessage(f"✅ Switched to {theme_name}", 2000)
-        self.theme_btn.setText("☀️ Light" if new == "dark" else "🌙 Dark")
     
     def apply_theme(self, theme):
         if theme == "dark":
