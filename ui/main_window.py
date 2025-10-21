@@ -316,18 +316,19 @@ class LiveTranslatorApp(QMainWindow):
         
         # Primary control - bigger and prominent
         self.listen_btn = QPushButton("🎤 Start Listening")
-        self.listen_btn.setMinimumHeight(50)
+        self.listen_btn.setMinimumHeight(45)
+        self.listen_btn.setMaximumHeight(45)
         self.listen_btn.clicked.connect(self.toggle_listening)
         self.listen_btn.setStyleSheet("""
             QPushButton {
                 font-weight: 600;
-                padding: 12px 20px;
-                font-size: 15px;
+                padding: 10px 18px;
+                font-size: 14px;
                 background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
                     stop:0 #4CAF50, stop:1 #388E3C);
                 color: white;
                 border: none;
-                border-radius: 10px;
+                border-radius: 8px;
             }
             QPushButton:hover {
                 background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
@@ -337,21 +338,27 @@ class LiveTranslatorApp(QMainWindow):
         self.listen_btn.setToolTip("Start/stop continuous speech recognition (Ctrl+L)")
         controls_layout.addWidget(self.listen_btn)
         
-        # Secondary controls - organized in rows
+        # Secondary controls - organized in rows with smaller buttons
         row1 = QHBoxLayout()
-        row1.setSpacing(8)
+        row1.setSpacing(6)
         
         self.translate_btn = QPushButton("🔄 Translate")
+        self.translate_btn.setMaximumHeight(35)
+        self.translate_btn.setMinimumHeight(35)
         self.translate_btn.clicked.connect(self.translate_manual)
         self.translate_btn.setToolTip("Manually translate (Ctrl+T)")
         row1.addWidget(self.translate_btn)
         
         self.speak_btn = QPushButton("🔊 Speak")
+        self.speak_btn.setMaximumHeight(35)
+        self.speak_btn.setMinimumHeight(35)
         self.speak_btn.clicked.connect(self.speak_output)
         self.speak_btn.setToolTip("Speak output (Ctrl+S)")
         row1.addWidget(self.speak_btn)
         
         self.stop_btn = QPushButton("🔇 Stop")
+        self.stop_btn.setMaximumHeight(35)
+        self.stop_btn.setMinimumHeight(35)
         self.stop_btn.clicked.connect(lambda: tts_manager.stop())
         self.stop_btn.setToolTip("Stop TTS playback")
         row1.addWidget(self.stop_btn)
@@ -359,14 +366,18 @@ class LiveTranslatorApp(QMainWindow):
         controls_layout.addLayout(row1)
         
         row2 = QHBoxLayout()
-        row2.setSpacing(8)
+        row2.setSpacing(6)
         
         self.source_btn = QPushButton("🎧 System Audio")
+        self.source_btn.setMaximumHeight(35)
+        self.source_btn.setMinimumHeight(35)
         self.source_btn.clicked.connect(self.toggle_source)
         self.source_btn.setToolTip("Switch audio input source")
         row2.addWidget(self.source_btn)
         
         self.overlay_btn = QPushButton("👁️ Overlay")
+        self.overlay_btn.setMaximumHeight(35)
+        self.overlay_btn.setMinimumHeight(35)
         self.overlay_btn.clicked.connect(self.toggle_overlay)
         self.overlay_btn.setToolTip("Toggle overlay (Ctrl+O)")
         row2.addWidget(self.overlay_btn)
@@ -443,6 +454,10 @@ class LiveTranslatorApp(QMainWindow):
         # Application control
         QShortcut(QKeySequence("Ctrl+Q"), self, self.close)
         QShortcut(QKeySequence("Alt+F4"), self, self.close)
+        
+        # Ensure shortcuts work globally
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
+        self.setFocus()
         
         log.info("✅ Keyboard shortcuts configured for accessibility")
     
@@ -727,7 +742,7 @@ Enjoy your professional-grade translator! 🚀
         
         # Enable voice duplication if that mode is selected
         if selected_mode == TranslationMode.VOICE_DUPLICATION:
-            if voice_duplication.get_current_model():
+            if voice_duplication.current_model:
                 voice_duplication.enable()
             else:
                 QMessageBox.information(
@@ -1156,7 +1171,6 @@ Enjoy your professional-grade translator! 🚀
         # Professional feedback
         theme_name = "🌙 Dark Mode" if new == "dark" else "☀️ Light Mode"
         self.statusBar().showMessage(f"✅ Switched to {theme_name}", 2000)
-        self.theme_btn.setText("☀️ Light" if new == "dark" else "🌙 Dark")
     
     def apply_theme(self, theme):
         if theme == "dark":
@@ -1203,10 +1217,10 @@ Enjoy your professional-grade translator! 🚀
                     background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
                         stop:0 rgba(60,60,70,0.8), stop:1 rgba(45,45,55,0.8));
                     border: 1.5px solid rgba(255,255,255,0.1);
-                    border-radius: 10px;
-                    padding: 11px 20px;
+                    border-radius: 8px;
+                    padding: 8px 16px;
                     font-weight: 500;
-                    font-size: 13px;
+                    font-size: 12px;
                     color: #e8eaed;
                     letter-spacing: 0.3px;
                 }
@@ -1336,10 +1350,10 @@ Enjoy your professional-grade translator! 🚀
                     background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
                         stop:0 rgba(255,255,255,0.95), stop:1 rgba(245,245,250,0.95));
                     border: 1.5px solid rgba(0,0,0,0.1);
-                    border-radius: 10px;
-                    padding: 11px 20px;
+                    border-radius: 8px;
+                    padding: 8px 16px;
                     font-weight: 500;
-                    font-size: 13px;
+                    font-size: 12px;
                     color: #1f1f1f;
                     letter-spacing: 0.3px;
                 }
@@ -1384,6 +1398,21 @@ Enjoy your professional-grade translator! 🚀
         
         # Update overlay style
         self.overlay.apply_style()
+    
+    def keyPressEvent(self, event):
+        """Handle key press events for shortcuts"""
+        if event.key() == Qt.Key.Key_O and event.modifiers() == Qt.KeyboardModifier.ControlModifier:
+            self.toggle_overlay()
+        elif event.key() == Qt.Key.Key_L and event.modifiers() == Qt.KeyboardModifier.ControlModifier:
+            self.toggle_listening()
+        elif event.key() == Qt.Key.Key_T and event.modifiers() == Qt.KeyboardModifier.ControlModifier:
+            self.translate_manual()
+        elif event.key() == Qt.Key.Key_S and event.modifiers() == Qt.KeyboardModifier.ControlModifier:
+            self.speak_output()
+        elif event.key() == Qt.Key.Key_D and event.modifiers() == Qt.KeyboardModifier.ControlModifier:
+            self.toggle_theme()
+        else:
+            super().keyPressEvent(event)
     
     def closeEvent(self, event):
         config.set("source_language", self.source_lang_combo.currentData())
