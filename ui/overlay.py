@@ -141,13 +141,12 @@ class ResizableOverlay(QWidget):
         bg = config.get("bg_color", "rgba(15,15,20,0.92)")
         
         # Professional Material Design 3 styling
+        # Note: backdrop-filter, box-shadow, and text-shadow are not supported by Qt StyleSheets
         self.setStyleSheet(f"""
             #overlayContainer {{
                 background: {bg};
                 border-radius: 20px;
                 border: 1.5px solid rgba(255,255,255,0.15);
-                backdrop-filter: blur(20px);
-                box-shadow: 0 8px 32px rgba(0,0,0,0.4);
             }}
             QLabel {{
                 color: {tc};
@@ -157,7 +156,6 @@ class ResizableOverlay(QWidget):
                 background: transparent;
                 font-family: "Segoe UI", "SF Pro Display", -apple-system, system-ui, sans-serif;
                 letter-spacing: 0.3px;
-                text-shadow: 0 2px 8px rgba(0,0,0,0.3);
             }}
         """)
     
